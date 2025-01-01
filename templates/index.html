@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>반응형 테이블</title>
+    <style>
+      /* 기본 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    padding: 20px;
+}
+
+/* 컨테이너 스타일 */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 삭제 버튼 */
+.header {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.delete-btn {
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background-color: #ff1a1a;
+}
+
+/* 테이블 스타일 */
+.table-container {
+    overflow-x: auto;
+}
+
+.table-wrapper {
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+td input[type="checkbox"] {
+    cursor: pointer;
+}
+
+/* 이미지 썸네일 스타일 */
+.image-thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+/* 전체 선택 체크박스 */
+input[type="checkbox"] {
+    cursor: pointer;
+}
+
+/* 팝업 스타일 */
+.popup {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 90%;
+    max-height: 80%;
+}
+
+.popup img {
+    max-width: 100%;
+    max-height: 400px;
+}
+
+.close-btn {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    background-color: #ff1a1a;
+}
+
+/* 반응형 테이블 */
+@media (max-width: 768px) {
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    /* 전체 선택 체크박스 크기 조정 */
+    th input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+    }
+
+    .image-thumbnail {
+        width: 80px;
+        height: 80px;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <!-- 상단 삭제 버튼 -->
+    <div class="container">
+        <div class="header">
+            <button id="deleteBtn" class="delete-btn">DELETE</button>
+        </div>
+
+        <!-- 테이블 컨테이너 -->
+        <div class="table-container">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll"> ALL </th>
+                            <th>이미지</th>
+                            <th>컬럼 3</th>
+                            <th>컬럼 4</th>
+                            <th>컬럼 5</th>
+                            <th>컬럼 6</th>
+                            <th>컬럼 7</th>
+                            <th>컬럼 8</th>
+                            <th>컬럼 9</th>
+                            <th>컬럼 10</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="checkbox" class="checkbox"></td>
+                            <td><img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="이미지 1" class="image-thumbnail"></td>
+                            <td>데이터 1</td>
+                            <td>데이터 2</td>
+                            <td>데이터 3</td>
+                            <td>데이터 4</td>
+                            <td>데이터 5</td>
+                            <td>데이터 6</td>
+                            <td>데이터 7</td>
+                            <td>데이터 8</td>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="checkbox"></td>
+                            <td><img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="이미지 2" class="image-thumbnail"></td>
+                            <td>데이터 9</td>
+                            <td>데이터 10</td>
+                            <td>데이터 11</td>
+                            <td>데이터 12</td>
+                            <td>데이터 13</td>
+                            <td>데이터 14</td>
+                            <td>데이터 15</td>
+                            <td>데이터 16</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 이미지 팝업 -->
+        <div id="imagePopup" class="popup">
+            <div class="popup-content">
+                <img id="popupImage" src="" alt="팝업 이미지">
+                <button id="closePopup" class="close-btn">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+      // 전체 선택 체크박스
+const selectAllCheckbox = document.getElementById('selectAll');
+const checkboxes = document.querySelectorAll('.checkbox');
+
+// 전체 선택 체크박스 클릭 시
+selectAllCheckbox.addEventListener('change', function() {
+    checkboxes.forEach(function(checkbox) {
+        checkbox.checked = selectAllCheckbox.checked;
+    });
+});
+
+// 개별 체크박스 클릭 시
+checkboxes.forEach(function(checkbox) {
+    checkbox.addEventListener('change', function() {
+        // 모든 체크박스가 선택되었는지 확인
+        const allChecked = [...checkboxes].every(checkbox => checkbox.checked);
+        selectAllCheckbox.checked = allChecked;
+        selectAllCheckbox.indeterminate = !allChecked && [...checkboxes].some(checkbox => checkbox.checked); // 일부만 체크된 상태일 때
+    });
+});
+
+// 이미지 클릭 시 팝업 띄우기
+const imageThumbnails = document.querySelectorAll('.image-thumbnail');
+const popup = document.getElementById('imagePopup');
+const popupImage = document.getElementById('popupImage');
+const closePopup = document.getElementById('closePopup');
+
+imageThumbnails.forEach(function(image) {
+    image.addEventListener('click', function() {
+        const imageUrl = image.src;
+        popupImage.src = imageUrl;
+        popup.style.display = 'flex'; // 팝업 보이기
+    });
+});
+
+// 팝업 닫기
+closePopup.addEventListener('click', function() {
+    popup.style.display = 'none'; // 팝업 닫기
+});
+
+// 팝업 배경 클릭 시 닫기
+popup.addEventListener('click', function(event) {
+    if (event.target === popup) {
+        popup.style.display = 'none'; // 배경 클릭 시 팝업 닫기
+    }
+});
+    </script>
+
+</body>
+</html>
