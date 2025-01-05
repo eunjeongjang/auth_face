@@ -132,30 +132,52 @@
         }
 
         /* 팝업 스타일 */
-        .popup {
-            display: none; /* 기본적으로 숨김 */
+            /* 팝업 (모달) 스타일 */
+        #imageModal {
+            display: none;
             position: fixed;
-            top: 0;
+            z-index: 1;
             left: 0;
+            top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            justify-content: center;
-            align-items: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding-top: 60px;
         }
 
-        .popup-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            max-width: 90%;
+        /* 이미지 스타일 */
+        #modalImage {
+            margin: auto;
+            display: block;
+            max-width: 80%;
             max-height: 80%;
         }
 
-        .popup img {
-            max-width: 100%;
-            max-height: 400px;
+        /* 닫기 버튼 스타일 */
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* 이미지 썸네일 스타일 */
+        .thumbnail {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+            margin: 10px;
         }
 
         .close-btn {
@@ -211,7 +233,8 @@
                                 <tr>
                                     <th><label><input type="checkbox" onClick="toggleSelectAll(this)"> Select All</label></th>
                                     <th>ID</th>
-                                    <th>Name</th>
+                                    <th>Imagepath</th>
+                                    <th>Image</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -220,6 +243,7 @@
                                     <td><input type="checkbox" class="item-checkbox" name="item_ids" value="{{ row.id }}"></td>
                                     <td>{{ row.id }}</td>
                                     <td>{{ row.image }}</td>
+                                    <td> <img src="data:image/jpeg;base64,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" alt="{{ row.image }}" class="thumbnail" onclick="openModal('{{ row.image }}')"></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -228,41 +252,29 @@
                 </div>
         </div>
     </form>
-        <!-- 이미지 팝업 -->
-        <div id="imagePopup" class="popup">
-            <div class="popup-content">
-                <img id="popupImage" src="" alt="팝업 이미지">
-                <button id="closePopup" class="close-btn">닫기</button>
-            </div>
-        </div>
-        <script>
-            // 이미지 클릭 시 팝업 띄우기
-            const imageThumbnails = document.querySelectorAll('.image-thumbnail');
-            const popup = document.getElementById('imagePopup');
-            const popupImage = document.getElementById('popupImage');
-            const closePopup = document.getElementById('closePopup');
 
-            imageThumbnails.forEach(function(image) {
-                image.addEventListener('click', function() {
-                    const imageUrl = image.src;
-                    popupImage.src = imageUrl;
-                    popup.style.display = 'flex'; // 팝업 보이기
-                });
-            });
+    <!-- 모달 팝업 -->
+    <div id="imageModal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img id="modalImage" src="" alt="">
+    </div>
 
-            // 팝업 닫기
-            closePopup.addEventListener('click', function() {
-                popup.style.display = 'none'; // 팝업 닫기
-            });
+    <script>
+        // 모달 팝업을 열기
+        function openModal(imageSrc) {
+            var modal = document.getElementById("imageModal");
+            var modalImage = document.getElementById("modalImage");
+            modal.style.display = "block";
+            modalImage.src = imageSrc;
+        }
 
-            // 팝업 배경 클릭 시 닫기
-            popup.addEventListener('click', function(event) {
-                if (event.target === popup) {
-                    popup.style.display = 'none'; // 배경 클릭 시 팝업 닫기
-                }
-            });
+        // 모달 팝업을 닫기
+        function closeModal() {
+            var modal = document.getElementById("imageModal");
+            modal.style.display = "none";
+        }
+    </script>
 
-        </script>
 </body>
 </html>
 
